@@ -11,22 +11,19 @@ import java.lang.ref.WeakReference;
 
 import static io.codetailps.animation.ViewAnimationUtils.SimpleAnimationListener;
 
-/**
- * @hide
- */
-public interface RevealAnimator{
+public interface RevealAnimator {
 
-    public void setClipOutlines(boolean clip);
+    void setClipOutlines(boolean clip);
 
-    public void setCenter(float cx, float cy);
+    void setCenter(float cx, float cy);
 
-    public void setTarget(View target);
+    void setTarget(View target);
 
-    public void setRevealRadius(float value);
+    void setRevealRadius(float value);
 
-    public float getRevealRadius();
+    float getRevealRadius();
 
-    public void invalidate(Rect bounds);
+    void invalidate(Rect bounds);
 
     static class RevealFinishedGingerbread extends SimpleAnimationListener {
         WeakReference<RevealAnimator> mReference;
@@ -43,7 +40,7 @@ public interface RevealAnimator{
 
             RevealAnimator target = mReference.get();
 
-            if(target == null){
+            if (target == null) {
                 return;
             }
 
@@ -83,7 +80,7 @@ public interface RevealAnimator{
 
             RevealAnimator target = mReference.get();
 
-            if(target == null){
+            if (target == null) {
                 return;
             }
 
@@ -123,7 +120,7 @@ public interface RevealAnimator{
 
             RevealAnimator target = mReference.get();
 
-            if(target == null){
+            if (target == null) {
                 return;
             }
 

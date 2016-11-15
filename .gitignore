@@ -5,3 +5,4 @@
 .DS_Store
 /build
 gradle-mvn-push.gradle
+/*/build

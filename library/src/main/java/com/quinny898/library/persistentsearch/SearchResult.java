@@ -8,8 +8,8 @@ public class SearchResult {
 
     /**
      * Create a search result with text and an icon
-     * @param title
-     * @param icon
+     * @param title name
+     * @param icon icon
      */
     public SearchResult(String title, Drawable icon) {
        this.title = title;

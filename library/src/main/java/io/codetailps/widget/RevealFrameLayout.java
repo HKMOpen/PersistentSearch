@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 
 import io.codetailps.animation.RevealAnimator;
 
-public class RevealFrameLayout extends FrameLayout implements RevealAnimator{
+public class RevealFrameLayout extends FrameLayout implements RevealAnimator {
 
     Path mRevealPath;
 
@@ -37,20 +37,21 @@ public class RevealFrameLayout extends FrameLayout implements RevealAnimator{
     /**
      * Animation target
      *
-     * @hide
+     * @param view view object
      */
     @Override
-    public void setTarget(View view){
+    public void setTarget(View view) {
         mTarget = view;
     }
 
     /**
      * Epicenter of animation circle reveal
      *
-     * @hide
+     * @param centerX n
+     * @param centerY n
      */
     @Override
-    public void setCenter(float centerX, float centerY){
+    public void setCenter(float centerX, float centerY) {
         mCenterX = centerX;
         mCenterY = centerY;
     }
@@ -58,20 +59,20 @@ public class RevealFrameLayout extends FrameLayout implements RevealAnimator{
     /**
      * Flag that animation is enabled
      *
-     * @hide
+     * @param clip bool
      */
     @Override
-    public void setClipOutlines(boolean clip){
+    public void setClipOutlines(boolean clip) {
         mClipOutlines = clip;
     }
 
     /**
      * Circle radius size
      *
-     * @hide
+     * @param radius float object now
      */
     @Override
-    public void setRevealRadius(float radius){
+    public void setRevealRadius(float radius) {
         mRadius = radius;
         invalidate();
     }
@@ -79,17 +80,17 @@ public class RevealFrameLayout extends FrameLayout implements RevealAnimator{
     /**
      * Circle radius size
      *
-     * @hide
+     * @return float in
      */
     @Override
-    public float getRevealRadius(){
+    public float getRevealRadius() {
         return mRadius;
     }
 
 
     @Override
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-        if(!mClipOutlines && child != mTarget)
+        if (!mClipOutlines && child != mTarget)
             return super.drawChild(canvas, child, drawingTime);
 
         final int state = canvas.save();

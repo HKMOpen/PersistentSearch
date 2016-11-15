@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 
 import io.codetailps.animation.RevealAnimator;
 
-public class RevealLinearLayout extends LinearLayout implements RevealAnimator{
+public class RevealLinearLayout extends LinearLayout implements RevealAnimator {
 
     Path mRevealPath;
 
@@ -34,45 +34,39 @@ public class RevealLinearLayout extends LinearLayout implements RevealAnimator{
         mRevealPath = new Path();
     }
 
-    /**
-     * @hide
-     */
     @Override
-    public void setTarget(View view){
+    public void setTarget(View view) {
         mTarget = view;
     }
 
-    /**
-     * @hide
-     */
+
     @Override
-    public void setCenter(float centerX, float centerY){
+    public void setCenter(float centerX, float centerY) {
         mCenterX = centerX;
         mCenterY = centerY;
     }
 
-    /**
-     * @hide
-     */
+
     @Override
-    public void setClipOutlines(boolean clip){
+    public void setClipOutlines(boolean clip) {
         mClipOutlines = clip;
     }
 
     /**
-     * @hide
+     * @param radius n
      */
     @Override
-    public void setRevealRadius(float radius){
+    public void setRevealRadius(float radius) {
         mRadius = radius;
         invalidate();
     }
 
     /**
-     * @hide
+     *
+     * @return float
      */
     @Override
-    public float getRevealRadius(){
+    public float getRevealRadius() {
         return mRadius;
     }
 
