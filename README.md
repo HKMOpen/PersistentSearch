@@ -1,5 +1,3 @@
-
-
 ## This project is deprecated
 It's not been maintained for well over half a year and is formally discontinued. There are better alternatives now, such as [SearchView](https://github.com/lapism/SearchView) and [FloatingSearchView](https://github.com/arimorty/floatingsearchview)
 
@@ -20,7 +18,7 @@ maven {
 ```
 Import it as a dependency:
 ```
-compile 'com.quinny898.library.persistentsearch:library:1.1.0-SNAPSHOT'
+compile 'com.hkm.ui:persistentsearch:1.2'
 ```
 
 Eclipse:
