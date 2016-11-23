@@ -38,7 +38,6 @@ import com.nineoldandroids.util.Property;
 import static android.graphics.Paint.Style;
 import static com.nineoldandroids.animation.Animator.AnimatorListener;
 
-
 public class MaterialMenuDrawable extends Drawable implements Animatable {
 
     public enum IconState {
