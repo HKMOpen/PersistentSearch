@@ -18,7 +18,7 @@ maven {
 ```
 Import it as a dependency:
 ```
-compile 'com.hkm.ui:persistentsearch:1.2'
+compile 'com.hkm.ui:persistentsearch:1.5'
 ```
 
 Eclipse:

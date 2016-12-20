@@ -10,9 +10,6 @@
         android:id="@+id/search_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="-4dp"
-        android:layout_marginRight="-4dp"
-        android:layout_marginTop="-4dp"
         android:background="@drawable/area_search"
         android:orientation="vertical">
 
@@ -116,7 +113,16 @@
                      android:layout_marginLeft="16dp"
                      android:layout_marginTop="8dp" />
      -->
-        </RelativeLayout>
 
+        </RelativeLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/extra_bank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:orientation="horizontal">
+
+    </LinearLayout>
 </io.codetailps.widget.RevealFrameLayout>

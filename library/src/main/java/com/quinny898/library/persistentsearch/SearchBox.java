@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.speech.RecognizerIntent;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.MenuRes;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -36,6 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -47,8 +49,10 @@ import com.balysv.materialmenu.ps.MaterialMenuDrawable.IconState;
 import com.balysv.materialmenu.ps.MaterialMenuView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import io.codetailps.animation.ResizeAnimation;
 import io.codetailps.animation.ReverseInterpolator;
 import io.codetailps.animation.SupportAnimator;
 import io.codetailps.animation.ViewAnimationUtils;
@@ -69,6 +73,7 @@ public class SearchBox extends RelativeLayout {
     private ImageView overflow;
     private PopupMenu popupMenu;
     private ImageView drawerLogo;
+    private LinearLayout extra_bank;
     private SearchListener listener;
     private MenuListener menuListener;
     private FrameLayout rootLayout;
@@ -81,7 +86,7 @@ public class SearchBox extends RelativeLayout {
     private android.support.v4.app.Fragment mContainerSupportFragment;
     private SearchFilter mSearchFilter;
     private ArrayAdapter<? extends SearchResult> mAdapter;
-
+    private RelativeLayout searchRoot;
     private boolean searchOpen;
     private boolean animate;
     private boolean input_back_press_hide = false;
@@ -119,6 +124,11 @@ public class SearchBox extends RelativeLayout {
     public SearchBox(final Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         inflate(context, R.layout.searchbox, this);
+        this.context = context;
+        init();
+    }
+
+    private void init() {
         this.searchOpen = false;
         this.isMic = true;
         this.animate = true;
@@ -126,7 +136,9 @@ public class SearchBox extends RelativeLayout {
         this.logo = (TextView) findViewById(R.id.logo);
         this.search = (EditText) findViewById(R.id.search);
         this.results = (ListView) findViewById(R.id.results);
-        this.context = context;
+        searchRoot = (RelativeLayout) findViewById(R.id.search_root);
+        extra_bank = (LinearLayout) findViewById(R.id.extra_bank);
+
         // this.pb = (ProgressBar) findViewById(R.id.pb);
         this.mic = (ImageView) findViewById(R.id.mic);
         this.overflow = (ImageView) findViewById(R.id.overflow);
@@ -136,20 +148,18 @@ public class SearchBox extends RelativeLayout {
 
         isVoiceRecognitionIntentSupported = isIntentAvailable(context, new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH));
         logo.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 toggleSearch();
             }
-
         });
         logo.setText("---");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            RelativeLayout searchRoot = (RelativeLayout) findViewById(R.id.search_root);
-            LayoutTransition lt = new LayoutTransition();
-            lt.setDuration(100);
-            searchRoot.setLayoutTransition(lt);
-        }
+
+
+        LayoutTransition lt = new LayoutTransition();
+        lt.setDuration(100);
+        searchRoot.setLayoutTransition(lt);
+
         searchables = new ArrayList<SearchResult>();
         search.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -276,6 +286,79 @@ public class SearchBox extends RelativeLayout {
         }
     }
 
+    private int delta_hide = 48;
+    private int duration_animation = 600;
+
+    public void setDeltaHide(int n) {
+        delta_hide = n;
+    }
+
+    private int now_status_width = -1;
+
+    public void RT_Hide() {
+        // getting the layoutparams might differ in your application, it depends on the parent layout
+        //RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) getLayoutParams();
+        ResizeAnimation a = new ResizeAnimation(searchRoot);
+        a.setDuration(duration_animation);
+        int wid = getWidth();
+        now_status_width = wid - (int) getByDp(delta_hide);
+        a.setWidths(wid, now_status_width);
+        a.setAnimationListener(new ListenerAnimation() {
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                showHiddenButtons(true);
+            }
+
+        });
+        searchRoot.startAnimation(a);
+    }
+
+    public void RT_Unhide() {
+        // getting the layoutparams might differ in your application, it depends on the parent layout
+        //  RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) getLayoutParams();
+        ResizeAnimation a = new ResizeAnimation(searchRoot);
+        a.setDuration(duration_animation);
+        int wid = now_status_width;
+        now_status_width = now_status_width + (int) getByDp(delta_hide);
+        a.setWidths(wid, now_status_width);
+        a.setAnimationListener(new ListenerAnimation() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                showHiddenButtons(false);
+            }
+
+        });
+        searchRoot.startAnimation(a);
+    }
+
+
+    private class ListenerAnimation implements Animation.AnimationListener {
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+
+        }
+    }
+
+    private void showHiddenButtons(boolean b) {
+        Iterator<ExtraFunction> list = buttonHolder.iterator();
+        while (list.hasNext()) {
+            ExtraFunction be = list.next();
+            be.setVisible(b);
+        }
+    }
+
     /***
      * Hide the searchbox using the circle animation which centres upon the provided menu item. Can be called regardless of result list length
      *
@@ -306,14 +389,10 @@ public class SearchBox extends RelativeLayout {
     public void hideCircularly(int x, int y, Activity activity) {
         final FrameLayout layout = (FrameLayout) activity.getWindow().getDecorView()
                 .findViewById(android.R.id.content);
-        RelativeLayout root = (RelativeLayout) findViewById(R.id.search_root);
-        Resources r = getResources();
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
-                r.getDisplayMetrics());
-        int finalRadius = (int) Math.max(layout.getWidth() * 1.5, px);
 
-        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
-                root, x, y, 0, finalRadius);
+        int finalRadius = (int) Math.max(layout.getWidth() * 1.5, getByDp(96));
+
+        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(searchRoot, x, y, 0, finalRadius);
         animator.setInterpolator(new ReverseInterpolator());
         animator.setDuration(500);
         animator.start();
@@ -366,6 +445,19 @@ public class SearchBox extends RelativeLayout {
         }
     }
 
+    private ArrayList<ExtraFunction> buttonHolder = new ArrayList<>();
+
+    public void addExraButtonOnShow(@DrawableRes int icon, OnClickListener event_click) {
+        ExtraFunction b = new ExtraFunction(icon, event_click);
+        buttonHolder.add(b);
+        extra_bank.addView(b.make(getContext()));
+        b.setVisible(false);
+    }
+
+    public void clearAllExtraFunctions() {
+        buttonHolder.clear();
+        extra_bank.removeAllViews();
+    }
 
     public boolean getSearchOpen() {
         return getVisibility() == VISIBLE;
@@ -745,18 +837,20 @@ public class SearchBox extends RelativeLayout {
         return searchables;
     }
 
+
+    private float getByDp(int size) {
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size, r.getDisplayMetrics());
+        return px;
+    }
+
     private void revealFrom(float x, float y, Activity a, SearchBox s) {
         FrameLayout layout = (FrameLayout) a.getWindow().getDecorView()
                 .findViewById(android.R.id.content);
-        RelativeLayout root = (RelativeLayout) s.findViewById(R.id.search_root);
-        Resources r = getResources();
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96,
-                r.getDisplayMetrics());
 
-        int finalRadius = (int) Math.max(layout.getWidth(), px);
+        int finalRadius = (int) Math.max(layout.getWidth(), getByDp(96));
 
-        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(
-                root, (int) x, (int) y, 0, finalRadius);
+        SupportAnimator animator = ViewAnimationUtils.createCircularReveal(searchRoot, (int) x, (int) y, 0, finalRadius);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(500);
         animator.addListener(new SupportAnimator.AnimatorListener() {

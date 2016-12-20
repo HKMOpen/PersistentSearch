@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="MaterialMenuView">
-        <attr name="mm_color" format="color"/>
-        <attr name="mm_scale" format="integer"/>
-        <attr name="mm_transformDuration" format="integer"/>
-        <attr name="mm_pressedDuration" format="integer"/>
-        <attr name="mm_strokeWidth" format="integer"/>
-        <attr name="mm_rtlEnabled" format="boolean"/>
+        <attr name="mm_color" format="color" />
+        <attr name="mm_scale" format="integer" />
+        <attr name="mm_transformDuration" format="integer" />
+        <attr name="mm_pressedDuration" format="integer" />
+        <attr name="mm_strokeWidth" format="integer" />
+        <attr name="mm_rtlEnabled" format="boolean" />
     </declare-styleable>
+
+    <style name="actionTransparentSearchExtra" parent="android:style/Widget.Holo.ActionButton">
+        <item name="paddingStart">5dp</item>
+        <item name="paddingEnd">5dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>

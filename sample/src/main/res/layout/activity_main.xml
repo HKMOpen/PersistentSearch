@@ -2,24 +2,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.quinny898.library.persistentsearch.sample.MainActivity" >
-
-<!--    <Button
-        android:id="@+id/revealactivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
-        android:layout_centerHorizontal="true"
-        android:onClick="reveal"
-        android:text="Reveal Activity" />
-    -->
+    tools:context="com.quinny898.library.persistentsearch.sample.MainActivity">
 
 
     <com.quinny898.library.persistentsearch.SearchBox
-        android:layout_width="wrap_content"
         android:id="@+id/searchbox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
+
+    <Button
+        android:id="@+id/revealactivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hidesave"
+        android:layout_centerHorizontal="true"
+        android:onClick="reveal"
+        android:text="Show Save" />
+
+    <Button
+        android:id="@+id/hidesave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="96dp"
+        android:onClick="reveal"
+        android:text="Hide Save" />
 
 </RelativeLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -17,62 +18,66 @@ import com.quinny898.library.persistentsearch.SearchResult;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-	Boolean isSearch;
-	private SearchBox search;
+    private Boolean isSearch;
+    private SearchBox search;
+    private Button show_save;
+    private Button hide_save;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		search = (SearchBox) findViewById(R.id.searchbox);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        search = (SearchBox) findViewById(R.id.searchbox);
+        show_save = (Button) findViewById(R.id.revealactivity);
+        hide_save = (Button) findViewById(R.id.hidesave);
         search.enableVoiceRecognition(this);
-		for(int x = 0; x < 10; x++){
-			SearchResult option = new SearchResult("Result " + Integer.toString(x), getResources().getDrawable(R.drawable.ic_history));
-			search.addSearchable(option);
-		}
-		search.setMenuListener(new MenuListener(){
+        for (int x = 0; x < 10; x++) {
+            SearchResult option = new SearchResult("Result " + Integer.toString(x), getResources().getDrawable(R.drawable.ic_history));
+            search.addSearchable(option);
+        }
+        search.setMenuListener(new MenuListener() {
 
-			@Override
-			public void onMenuClick() {
-				//Hamburger has been clicked
-				Toast.makeText(MainActivity.this, "Menu click", Toast.LENGTH_LONG).show();				
-			}
-			
-		});
-		search.setSearchListener(new SearchListener(){
+            @Override
+            public void onMenuClick() {
+                //Hamburger has been clicked
+                Toast.makeText(MainActivity.this, "Menu click", Toast.LENGTH_LONG).show();
+            }
 
-			@Override
-			public void onSearchOpened() {
-				//Use this to tint the screen
-			}
+        });
+        search.setSearchListener(new SearchListener() {
 
-			@Override
-			public void onSearchClosed() {
-				//Use this to un-tint the screen
-			}
+            @Override
+            public void onSearchOpened() {
+                //Use this to tint the screen
+            }
 
-			@Override
-			public void onSearchTermChanged(String term) {
-				//React to the search term changing
-				//Called after it has updated results
-			}
+            @Override
+            public void onSearchClosed() {
+                //Use this to un-tint the screen
+            }
 
-			@Override
-			public void onSearch(String searchTerm) {
-				Toast.makeText(MainActivity.this, searchTerm +" Searched", Toast.LENGTH_LONG).show();
-			}
+            @Override
+            public void onSearchTermChanged(String term) {
+                //React to the search term changing
+                //Called after it has updated results
+            }
 
-			@Override
-			public void onResultClick(SearchResult result) {
-				//React to a result being clicked
-			}
+            @Override
+            public void onSearch(String searchTerm) {
+                Toast.makeText(MainActivity.this, searchTerm + " Searched", Toast.LENGTH_LONG).show();
+            }
 
-			@Override
-			public void onSearchCleared() {
-				//Called when the clear button is clicked
-			}
-			
-		});
+            @Override
+            public void onResultClick(SearchResult result) {
+                //React to a result being clicked
+            }
+
+            @Override
+            public void onSearchCleared() {
+                //Called when the clear button is clicked
+            }
+
+        });
         search.setOverflowMenu(R.menu.overflow_menu);
         search.setOverflowMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -85,20 +90,38 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
+        show_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search.RT_Unhide();
+            }
+        });
+        hide_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search.RT_Hide();
+            }
+        });
+        search.addExraButtonOnShow(R.drawable.ic_camera_black_24dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search.RT_Unhide();
+            }
+        });
     }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == 1234 && resultCode == RESULT_OK) {
-			ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			search.populateEditText(matches.get(0));
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-	
-	public void reveal(View v){
-		startActivity(new Intent(this, RevealActivity.class));
-	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1234 && resultCode == RESULT_OK) {
+            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            search.populateEditText(matches.get(0));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
-	
+    public void reveal(View v) {
+        startActivity(new Intent(this, RevealActivity.class));
+    }
+
+
 }
