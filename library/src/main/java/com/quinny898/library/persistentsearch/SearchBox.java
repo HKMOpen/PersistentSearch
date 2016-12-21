@@ -286,17 +286,25 @@ public class SearchBox extends RelativeLayout {
         }
     }
 
-    private int delta_hide = 48;
+    private int delta_hide = 48, unit_width = 48;
     private int duration_animation = 600;
 
     public void setDeltaHide(int n) {
         delta_hide = n;
     }
 
-    private int now_status_width = -1;
+    private void calculateWidth() {
+        delta_hide = buttonHolder.size() * unit_width;
+    }
 
-    public void RT_Hide() {
-        // getting the layoutparams might differ in your application, it depends on the parent layout
+    private int now_status_width = -1, bar_hidden_button_status = 0;
+
+    public static final int HIDDEN_BUTTON_STATUS_OPEN = 211;
+    public static final int HIDDEN_BUTTON_STATUS_CLOSE = 214;
+
+    public void RT_ShowHidenButton() {
+        if (bar_hidden_button_status != HIDDEN_BUTTON_STATUS_CLOSE) return;
+        //getting the layoutparams might differ in your application, it depends on the parent layout
         //RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) getLayoutParams();
         ResizeAnimation a = new ResizeAnimation(searchRoot);
         a.setDuration(duration_animation);
@@ -304,19 +312,23 @@ public class SearchBox extends RelativeLayout {
         now_status_width = wid - (int) getByDp(delta_hide);
         a.setWidths(wid, now_status_width);
         a.setAnimationListener(new ListenerAnimation() {
-
             @Override
             public void onAnimationEnd(Animation animation) {
                 showHiddenButtons(true);
+                bar_hidden_button_status = HIDDEN_BUTTON_STATUS_OPEN;
             }
-
         });
         searchRoot.startAnimation(a);
     }
 
-    public void RT_Unhide() {
-        // getting the layoutparams might differ in your application, it depends on the parent layout
-        //  RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) getLayoutParams();
+    public int getHiddenButtonBarStatus() {
+        return bar_hidden_button_status;
+    }
+
+    public void RT_HideButtons() {
+        if (bar_hidden_button_status != HIDDEN_BUTTON_STATUS_OPEN) return;
+        //getting the layoutparams might differ in your application, it depends on the parent layout
+        //RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) getLayoutParams();
         ResizeAnimation a = new ResizeAnimation(searchRoot);
         a.setDuration(duration_animation);
         int wid = now_status_width;
@@ -326,6 +338,7 @@ public class SearchBox extends RelativeLayout {
             @Override
             public void onAnimationStart(Animation animation) {
                 showHiddenButtons(false);
+                bar_hidden_button_status = HIDDEN_BUTTON_STATUS_CLOSE;
             }
 
         });
@@ -452,6 +465,8 @@ public class SearchBox extends RelativeLayout {
         buttonHolder.add(b);
         extra_bank.addView(b.make(getContext()));
         b.setVisible(false);
+        calculateWidth();
+        bar_hidden_button_status = HIDDEN_BUTTON_STATUS_CLOSE;
     }
 
     public void clearAllExtraFunctions() {

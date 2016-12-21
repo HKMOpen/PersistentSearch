@@ -93,19 +93,19 @@ public class MainActivity extends Activity {
         show_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search.RT_Unhide();
+                search.RT_ShowHidenButton();
             }
         });
         hide_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search.RT_Hide();
+                search.RT_HideButtons();
             }
         });
         search.addExraButtonOnShow(R.drawable.ic_camera_black_24dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search.RT_Unhide();
+                search.RT_HideButtons();
             }
         });
     }
